@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'English'
 require 'tty-prompt'
 require 'optparse'
 require 'please'
@@ -50,7 +51,7 @@ loop do
   case action
   when :run
     Process.wait spawn(command)
-    exit $?.exitstatus
+    exit $CHILD_STATUS.exitstatus
   when :abort
     break
   when :edit

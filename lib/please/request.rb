@@ -13,7 +13,7 @@ module Please
         # Show information about the operating system
         $ uname -a
         #{`uname -a`}
-      
+
         # List all files in the current directory
         $ ls -a
         #{`ls -a`}
