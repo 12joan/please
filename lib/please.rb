@@ -2,6 +2,7 @@
 
 require_relative 'please/version'
 require_relative 'please/request'
+require_relative 'please/openai/codex_service'
 
 module Please
   class Error < StandardError; end
