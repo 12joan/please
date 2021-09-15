@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  please:
+    build: .
+    tty: true
+    stdin_open: true
+    volumes:
+      - '.:/app'
