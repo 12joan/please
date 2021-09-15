@@ -50,7 +50,7 @@ loop do
   case action
   when :run
     Process.wait spawn(command)
-    break
+    exit $?.exitstatus
   when :abort
     break
   when :edit
