@@ -23,7 +23,7 @@ module Please
       def default_parameters
         {
           temperature: 0,
-          max_tokens: 300,
+          max_tokens: 512,
           top_p: 1,
           frequency_penalty: 0,
           presence_penalty: 0,

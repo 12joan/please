@@ -49,25 +49,25 @@ module Please
 
         {
           instruction: 'Download a random dog picture',
-          command: 'python3 -c \'import urllib.request; import json; import subprocess; data = urllib.request.urlopen("https://dog.ceo/api/breeds/image/random").read(); url = json.loads(data)["message"]; subprocess.call(["curl", url, "-o", "dog.jpg"])\'',
+          command: 'printf \'import urllib.request\nimport json\nimport subprocess\ndata = urllib.request.urlopen("https://dog.ceo/api/breeds/image/random").read()\nurl = json.loads(data)["message"]\nsubprocess.call(["curl", url, "-o", "dog.jpg"])\' > /tmp/program.py; python3 /tmp/program.py; rm /tmp/program.py',
           result: '',
         },
 
         {
           instruction: 'Read from stdin until EOF, and then output the length of the string',
-          command: 'python3 -c \'import sys; print(len(sys.stdin.read().strip()))\'',
-          result: '',
-        },
-
-        {
-          instruction: 'Read a single line from stdin and pipe it to cowsay',
-          command: 'python3 -c \'print(input())\' | cowsay',
+          command: 'printf \'import sys\nprint(len(sys.stdin.read().strip()))\' > /tmp/program.py; python3 /tmp/program.py; rm /tmp/program.py',
           result: '',
         },
 
         {
           instruction: 'Run the fortune command 5 times',
-          command: 'for i in {1..5}; do fortune; done',
+          command: 'for i in $(seq 5); do fortune; done',
+          result: '',
+        },
+
+        {
+          instruction: 'Repeadedly read a single line from the user, reverse it, and print it back',
+          command: 'printf \'while True:\n\tline = input()\n\tprint(line[::-1])\' > /tmp/program.py; python3 /tmp/program.py; rm /tmp/program.py',
           result: '',
         },
       ]
