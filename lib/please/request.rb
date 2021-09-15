@@ -1,22 +1,25 @@
 # frozen_string_literal: true
 
 module Please
-  Request = Struct.new(:options, :instruction, :codex_service, keyword_init: true) do
+  Request = Struct.new(:instruction, :codex_service, :context, keyword_init: true) do
     def send
-      codex_service.completion(<<~PROMPT.chomp).strip
-        Write a one-line bash command each of the following tasks.
+      codex_service.completion(prompt)
+        .strip
+        # Collapse multiline commands into one line
+        .gsub(/\s*\\\n\s*/, ' ')
+        # Remove subsequent lines that do not contain commands
+        .gsub(/\n[^\$][^\n]*$/, '')
+        # Collapse multiple commands into one line
+        .gsub(/\n\$ /, '; ')
+        # Remove multiple consecutive spaces
+        .gsub(/\s+/, ' ')
+    end
 
-        # Print the current working directory
-        $ pwd
-        #{`pwd`}
+    def prompt
+      <<~PROMPT.chomp
+        Write a one-line bash command for each of the following tasks.
 
-        # Show information about the operating system
-        $ uname -a
-        #{`uname -a`}
-
-        # List all files in the current directory
-        $ ls -a
-        #{`ls -a`}
+        #{context.to_s}
 
         # #{instruction.gsub(/\n/, " ")}
         $

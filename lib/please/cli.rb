@@ -9,12 +9,33 @@ require 'tempfile'
 begin
   tty_prompt = TTY::Prompt.new
 
-  options = {}
+  options = {
+    show_prompt: false,
+    send_pwd: true,
+    send_uname: true,
+    send_ls: true,
+  }
 
   USAGE = 'Usage: please [options] <instruction>'
 
   OptionParser.new do |opts|
     opts.banner = USAGE
+
+    opts.on('--show-prompt', 'Output the prompt that would ordinarily be sent to OpenAI Codex, and then exit') do |v|
+      options[:show_prompt] = v
+    end
+
+    opts.on('--[no-]send-pwd', 'Send the result of `pwd` as part of the prompt') do |v|
+      options[:send_pwd] = v
+    end
+
+    opts.on('--[no-]send-uname', 'Send the result of `uname -a` as part of the prompt') do |v|
+      options[:send_uname] = v
+    end
+
+    opts.on('--[no-]send-ls', 'Send the result of `ls -a` as part of the prompt') do |v|
+      options[:send_ls] = v
+    end
   end.parse!
 
   access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') do
@@ -31,11 +52,18 @@ begin
     exit 1
   end
 
+  context = Please::Context.new(options)
+
   request = Please::Request.new(
-    options: options,
     instruction: instruction,
+    context: context,
     codex_service: codex_service,
   )
+
+  if options[:show_prompt]
+    tty_prompt.say request.prompt
+    exit
+  end
 
   command = request.send
 
