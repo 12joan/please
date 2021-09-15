@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-require 'please'
+require 'tty-prompt'
 require 'optparse'
+require 'please'
+require 'tempfile'
+
+tty_prompt = TTY::Prompt.new
 
 options = {}
 
@@ -12,7 +16,7 @@ OptionParser.new do |opts|
 end.parse!
 
 access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') do
-  warn 'Ensure the OPENAI_ACCESS_TOKEN environment variable is set'
+  tty_prompt.error 'Ensure the OPENAI_ACCESS_TOKEN environment variable is set'
   exit 1
 end
 
@@ -21,7 +25,7 @@ codex_service = Please::OpenAI::CodexService.new(access_token: access_token)
 instruction = ARGV.join(' ')
 
 if instruction.empty?
-  warn USAGE
+  tty_prompt.error USAGE
   exit 1
 end
 
@@ -32,4 +36,32 @@ request = Please::Request.new(
 )
 
 command = request.send
-puts "$ #{command}"
+
+loop do
+  print '$ '
+  tty_prompt.ok command
+
+  action = tty_prompt.expand('Run the command?') do |q|
+    q.choice key: 'y', name: 'Yes', value: :run
+    q.choice key: 'n', name: 'No', value: :abort
+    q.choice key: 'e', name: 'Edit command before running', value: :edit
+  end
+
+  case action
+  when :run
+    Process.wait spawn(command)
+    break
+  when :abort
+    break
+  when :edit
+    Tempfile.open('command') do |file|
+      file << command
+      file.flush
+
+      Process.wait spawn("${EDITOR:-vi} #{file.path}")
+
+      file.rewind
+      command = file.read.chomp
+    end
+  end
+end
