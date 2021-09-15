@@ -1,39 +1,37 @@
 # Please
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/please`. To experiment with that code, run `bin/console` for an interactive prompt.
+**⚠️ Requires an access token for OpenAI Codex, which is currently in private beta**
 
-TODO: Delete this and the text above, and describe your gem
+Convert natural language to bash commands using OpenAI Codex
+
+![Demo video](https://user-images.githubusercontent.com/4272090/133416481-febce287-1c3b-4a10-ab3e-b7228d403d7a.gif)
 
 ## Installation
 
-Add this line to your application's Gemfile:
+    $ gem install openai-please
 
-```ruby
-gem 'please'
+Ensure your [OpenAI API key](https://help.openai.com/en/articles/5480100-how-do-i-gain-access-to-openai-codex) is stored in an environment variable.
+
 ```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install please
+OPENAI_ACCESS_TOKEN=[YOUR ACCESS TOKEN HERE]
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+```shell
+user@host:~$ please find all files larger than 1 mb
+$ find . -type f -size +1M
+Run the command? (enter "h" for help) [y,n,e,h]
+```
 
-## Development
+You can [e]dit the command before running it by pressing the 'e' key. This uses the editor specified in the $EDITOR variable, defaulting to vi.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Privacy
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+In addition to the instruction text, the result of each of the following commands is sent to OpenAI Codex to improve the relevance of completions.
 
-## Contributing
+- `pwd`
+- `uname -a`
+- `ls -a`
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/please.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+See [OpenAI's privacy policy](https://beta.openai.com/policies/privacy-policy) for more information.
