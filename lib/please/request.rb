@@ -8,6 +8,15 @@ module Please
 
         # Print the current working directory
         $ pwd
+        #{`pwd`}
+
+        # Show information about the operating system
+        $ uname -a
+        #{`uname -a`}
+      
+        # List all files in the current directory
+        $ ls -a
+        #{`ls -a`}
 
         # #{instruction.gsub(/\n/, " ")}
         $
