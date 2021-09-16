@@ -19,11 +19,14 @@ begin
     send_uname: true,
     send_ls: true,
     access_token: ENV.fetch('OPENAI_ACCESS_TOKEN', nil),
+    examples: [],
+    skip_default_examples: false,
   }
 
   if File.exist?(CONFIG_FILE_PATH)
     begin
       options.merge! YAML.load_file(CONFIG_FILE_PATH).transform_keys(&:to_sym)
+      options[:examples].each { |example| example.transform_keys!(&:to_sym) }
     rescue StandardError
       tty_prompt.warn 'Could not parse config file. Ignoring.'
     end

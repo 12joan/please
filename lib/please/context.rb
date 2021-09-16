@@ -55,11 +55,15 @@ OPTIONAL_EXAMPLES = {
 module Please
   class Context
     def initialize(options)
-      @examples = DEFAULT_EXAMPLES.dup
+      @examples = []
+
+      @examples += DEFAULT_EXAMPLES unless options[:skip_default_examples]
 
       @examples << OPTIONAL_EXAMPLES[:pwd] if options[:send_pwd]
       @examples << OPTIONAL_EXAMPLES[:uname] if options[:send_uname]
       @examples << OPTIONAL_EXAMPLES[:ls] if options[:send_ls]
+
+      @examples += options[:examples]
     end
 
     def to_s
