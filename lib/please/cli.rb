@@ -21,10 +21,10 @@ begin
     access_token: ENV.fetch('OPENAI_ACCESS_TOKEN', nil),
   }
 
-  if File.exists?(CONFIG_FILE_PATH)
+  if File.exist?(CONFIG_FILE_PATH)
     begin
       options.merge! YAML.load_file(CONFIG_FILE_PATH).transform_keys(&:to_sym)
-    rescue
+    rescue StandardError
       tty_prompt.warn 'Could not parse config file. Ignoring.'
     end
   end

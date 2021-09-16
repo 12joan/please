@@ -67,7 +67,7 @@ module Please
         <<~EXAMPLE.chomp
           # #{example[:instruction]}
           $ #{example[:command]}
-          #{if example[:execute] then `#{example[:command]}` else '' end}
+          #{example[:execute] ? `#{example[:command]}` : ""}
         EXAMPLE
       end.join("\n")
     end
