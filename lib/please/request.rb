@@ -8,7 +8,7 @@ module Please
         # Collapse multiline commands into one line
         .gsub(/\s*\\\n\s*/, ' ')
         # Remove subsequent lines that do not contain commands
-        .gsub(/\n[^\$][^\n]*$/, '')
+        .gsub(/\n[^$][^\n]*$/, '')
         # Collapse multiple commands into one line
         .gsub(/\n\$ /, '; ')
         # Remove multiple consecutive spaces
@@ -19,7 +19,7 @@ module Please
       <<~PROMPT.chomp
         Write a one-line bash command for each of the following tasks.
 
-        #{context.to_s}
+        #{context}
 
         # #{instruction.gsub(/\n/, " ")}
         $
