@@ -2,9 +2,13 @@
 
 require 'English'
 require 'tty-prompt'
+require 'yaml'
 require 'optparse'
 require 'please'
 require 'tempfile'
+
+USAGE = 'Usage: please [options] <instruction>'
+CONFIG_FILE_PATH = File.expand_path('~/.config/please/config.yml')
 
 begin
   tty_prompt = TTY::Prompt.new
@@ -16,10 +20,22 @@ begin
     send_ls: true,
   }
 
-  USAGE = 'Usage: please [options] <instruction>'
+  if File.exists?(CONFIG_FILE_PATH)
+    begin
+      options.merge! YAML.load_file(CONFIG_FILE_PATH).transform_keys(&:to_sym)
+    rescue
+      tty_prompt.warn 'Could not parse config file. Ignoring.'
+    end
+  end
+
+  puts options.inspect
 
   OptionParser.new do |opts|
     opts.banner = USAGE
+
+    opts.on('--show-config-path', 'Output the location of the config file, and then exit') do |v|
+      options[:show_config_path] = v
+    end
 
     opts.on('--show-prompt', 'Output the prompt that would ordinarily be sent to OpenAI Codex, and then exit') do |v|
       options[:show_prompt] = v
@@ -37,6 +53,11 @@ begin
       options[:send_ls] = v
     end
   end.parse!
+
+  if options[:show_config_path]
+    tty_prompt.say CONFIG_FILE_PATH
+    exit
+  end
 
   access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') do
     tty_prompt.error 'Ensure the OPENAI_ACCESS_TOKEN environment variable is set'

@@ -1,0 +1,3 @@
+send_pwd: false
+send_ls: false
+send_uname: true

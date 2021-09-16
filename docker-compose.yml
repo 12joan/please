@@ -8,3 +8,4 @@ services:
     env_file: .env
     volumes:
       - '.:/app'
+      - './config.yml:/root/.config/please/config.yml:ro'
