@@ -18,6 +18,7 @@ begin
     send_pwd: true,
     send_uname: true,
     send_ls: true,
+    access_token: ENV.fetch('OPENAI_ACCESS_TOKEN', nil),
   }
 
   if File.exists?(CONFIG_FILE_PATH)
@@ -27,8 +28,6 @@ begin
       tty_prompt.warn 'Could not parse config file. Ignoring.'
     end
   end
-
-  puts options.inspect
 
   OptionParser.new do |opts|
     opts.banner = USAGE
@@ -59,12 +58,12 @@ begin
     exit
   end
 
-  access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') do
-    tty_prompt.error 'Ensure the OPENAI_ACCESS_TOKEN environment variable is set'
+  if options[:access_token].nil?
+    tty_prompt.error "Access token not found. Set it in #{CONFIG_FILE_PATH} or $OPENAI_ACCESS_TOKEN."
     exit 1
   end
 
-  codex_service = Please::OpenAI::CodexService.new(access_token: access_token)
+  codex_service = Please::OpenAI::CodexService.new(access_token: options[:access_token])
 
   instruction = ARGV.join(' ')
 
