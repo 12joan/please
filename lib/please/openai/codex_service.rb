@@ -9,10 +9,7 @@ module Please
         client = ::OpenAI::Client.new(access_token: access_token)
 
         response = client.completions(
-          engine: 'davinci-codex',
-          parameters: default_parameters.merge(
-            prompt: prompt,
-          ),
+          parameters: default_parameters.merge(prompt: prompt),
         )
 
         response.parsed_response.fetch('choices').first.fetch('text')
@@ -22,6 +19,7 @@ module Please
 
       def default_parameters
         {
+          model: 'code-davinci-002',
           temperature: 0,
           max_tokens: 512,
           top_p: 1,
