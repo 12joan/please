@@ -6,5 +6,5 @@
 /pkg/
 /spec/reports/
 /tmp/
-.env
-config.yml
+/.env
+/config/config.yml
