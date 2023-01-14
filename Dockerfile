@@ -9,3 +9,7 @@ COPY lib/please/version.rb ./lib/please/version.rb
 RUN bundle install
 
 COPY ./ ./
+RUN ln -s /app/exe/please /usr/local/bin/please
+
+ENTRYPOINT ["bundle", "exec"]
+CMD ["echo", "Try running 'please say hello'"]
