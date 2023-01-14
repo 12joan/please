@@ -10,7 +10,7 @@ Convert natural language to bash commands using OpenAI Codex
 
     $ gem install openai-please
 
-Provide your [OpenAI API key](https://help.openai.com/en/articles/5480100-how-do-i-gain-access-to-openai-codex) in an environment variable, or using the [configuration file](#configuration).
+Provide your [OpenAI API key](https://beta.openai.com/account/api-keys) in an environment variable, or using the [configuration file](#configuration).
 
 ```
 OPENAI_ACCESS_TOKEN=[YOUR ACCESS TOKEN HERE]
