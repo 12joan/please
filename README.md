@@ -81,3 +81,20 @@ By default, the result of each of the following commands is sent to OpenAI Codex
 This behaviour can be disabled using the configuration options described above. You can review the prompt before sending it to OpenAI by running `please --show-prompt`. 
 
 See [OpenAI's privacy policy](https://beta.openai.com/policies/privacy-policy) for more information.
+
+## Development
+
+With Docker:
+
+1. Copy `.env.example` to `.env` and add your OpenAI access token
+2. (Optional) Add a custom config in `./config/config.yml`
+3. Run `docker-compose run --rm please rake` to run the tests and RuboCop
+4. Run `docker-compose run --rm please please <instruction>` to run the CLI
+
+Without Docker:
+
+1. Create an environment variable `OPENAI_ACCESS_TOKEN` containing your OpenAI access token
+2. (Optional) Add a custom config in `~/.config/please/config.yml`
+3. Run `bundle install` to install the dependencies
+4. Run `bundle exec rake` to run the tests and RuboCop
+5. Run `bundle exec exe/please <instruction>` to run the CLI
